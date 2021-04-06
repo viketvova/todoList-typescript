@@ -1,11 +1,12 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from "react";
+import React from "react";
+import {AddItemForm} from "./AddItemForm";
 
 type TaskType = {
     id: string,
     title: string,
     isDone: boolean,
 }
-type AddTaskType = (event: string, todoListId: string, error: boolean) => void
+export type AddTaskType = (event: string, todoListId: string) => void
 type TodoListProps = {
     title: string,
     tasks: Array<TaskType>
@@ -21,27 +22,6 @@ type TodoListProps = {
 
 export function TodoList(props: TodoListProps) {
 
-    const [value, setValue] = useState('')
-    const [error, setError] = useState<boolean>(false)
-
-    function onClickHandler() {
-        if(!value.trim()) setError(true)
-        props.addTask(value, props.todoListId, error)
-        setValue('')
-    }
-
-
-    function onKeyPressHandler(key: KeyboardEvent<HTMLInputElement>): void {
-       setError(false)
-        if (key.charCode === 13) {
-            props.addTask(value, props.todoListId, error)
-            setValue('')
-        }
-    }
-
-    function onChangeHandler(event: ChangeEvent<HTMLInputElement>): void {
-        setValue(event.target.value)
-    }
 
     function onClickAll(): void {
         props.tasksCompleted('All', props.todoListId)
@@ -57,6 +37,10 @@ export function TodoList(props: TodoListProps) {
 
     function deleteTable(): void {
         props.deleteTable(props.todoListId)
+    }
+
+    const addTask = (title: string) => {
+        props.addTask(title, props.todoListId)
     }
 
     const tasks = props.tasks.map(elem => {
@@ -81,13 +65,7 @@ export function TodoList(props: TodoListProps) {
             <h3>{props.title}
                 <button onClick={deleteTable}>X</button>
             </h3>
-            <div>
-                <input className={error ? 'error' : ''} onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}
-                       value={value}/>
-                <button onClick={onClickHandler}>+</button>
-                {error ? <div className='error-message'>This is bad idea</div> : null}
-            </div>
+           <AddItemForm addItem={addTask}/>
             <ul>
                 {tasks}
 

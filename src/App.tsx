@@ -2,19 +2,25 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {v1} from "uuid";
+import {AddItemForm} from './AddItemForm';
 
 
 export type TasksType = {
     id: string, title: string, isDone: boolean
 }[]
-type ObjTasks = { todoListId1: TasksType, todoListId2: TasksType }
+
+type RootTasksType = {
+    [key: string]: TasksType,
+    }
+
 type TodoListType = { id: string, title: string, filter: string }
+
 function App() {
 
     const todoListId1 = v1()
     const todoListId2 = v1()
 
-    const [tasks, setTasks] = useState<any>({
+    const [tasks, setTasks] = useState<RootTasksType>({
             [todoListId1]: [
                 {id: v1(), title: 'HTML&CSS', isDone: true},
                 {id: v1(), title: 'JS', isDone: false},
@@ -34,7 +40,7 @@ function App() {
 
     const [newTasks, setNewTasks] = useState<Array<TodoListType>>(
         [
-            {id: todoListId1, title: 'What to learn?', filter: 'Completed'},
+            {id: todoListId1, title: 'What to learn?', filter: 'All'},
             {id: todoListId2, title: 'What to eat?', filter: 'All'},
         ])
 
@@ -45,7 +51,7 @@ function App() {
         setTasks({...tasks})
     }
 
-    function addTask(event: string, todoListId: string, error: boolean): void {
+    function addTask(event: string, todoListId: string): void {
         let b = tasks[todoListId]
         if (event.trim() !== '') {
             let newT = {id: v1(), title: event.trim(), isDone: false}
@@ -76,9 +82,20 @@ function App() {
         setTasks({...tasks})
     }
 
+    function addItem(title: string) {
+        let newT = [...newTasks]
+        let newTodoList = {id: v1(), title: title, filter: 'All'}
+        newT.push(newTodoList)
+        setNewTasks(newT)
+        setTasks({
+            ...tasks,
+            [newTodoList.id]: []
+        })
+    }
 
     return (
         <div className="App">
+            <AddItemForm addItem={addItem}/>
             {
                 newTasks.map(t => {
 
