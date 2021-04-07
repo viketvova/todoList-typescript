@@ -4,14 +4,14 @@ import {TodoList} from "./TodoList";
 import {v1} from "uuid";
 import {AddItemForm} from './AddItemForm';
 
-
+export type EditTaskType = (event: string, todoListId: string, id: string) => void
 export type TasksType = {
     id: string, title: string, isDone: boolean
 }[]
 
 type RootTasksType = {
     [key: string]: TasksType,
-    }
+}
 
 type TodoListType = { id: string, title: string, filter: string }
 
@@ -60,15 +60,35 @@ function App() {
         }
     }
 
+    function editTask(event: string, todoListId: string, id: string): void {
+        let newTasks = tasks[todoListId]
+        newTasks.map(elem => {
+            if (elem.id === id) elem.title = event
+        })
+        tasks[todoListId] = newTasks
+        setTasks({...tasks})
+    }
+
+    function editTodoListTitle(event: string, todoListId: string): void {
+        let newTodo = [...newTasks]
+        let newTodoList = newTodo.find(elem => elem.id === todoListId)
+        if (newTodoList) {
+            newTodoList.title = event
+            setNewTasks([...newTodo])
+        }
+
+
+    }
+
     function deleteTask(id: string, todoListId: string): void {
-        let t = tasks[todoListId].filter((elem: any) => elem.id !== id)
-        tasks[todoListId] = t
+        let task = tasks[todoListId].filter((elem: any) => elem.id !== id)
+        tasks[todoListId] = task
         setTasks({...tasks})
     }
 
     function tasksCompleted(completed: string, todoListId: string): void {
-        let b = newTasks.find(elem => elem.id === todoListId)
-        if (b) b.filter = completed
+        let newTask = newTasks.find(elem => elem.id === todoListId)
+        if (newTask) newTask.filter = completed
         setNewTasks([...newTasks])
 
     }
@@ -114,6 +134,8 @@ function App() {
                             isDoneHandler={isDoneHandler}
                             filter={t.filter}
                             deleteTable={deleteTable}
+                            editTask={editTask}
+                            editTodoListTitle={editTodoListTitle}
                         />
                     )
                 })

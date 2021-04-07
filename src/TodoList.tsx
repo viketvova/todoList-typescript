@@ -1,5 +1,7 @@
 import React from "react";
 import {AddItemForm} from "./AddItemForm";
+import {EditableSpan} from "./EditableSpan";
+import {EditTaskType} from "./App";
 
 type TaskType = {
     id: string,
@@ -17,6 +19,8 @@ type TodoListProps = {
     filter: string
     todoListId: string
     deleteTable: (todoListId: string) => void
+    editTask: EditTaskType
+    editTodoListTitle: (event: string, todoListId: string) => void
 }
 
 
@@ -39,8 +43,12 @@ export function TodoList(props: TodoListProps) {
         props.deleteTable(props.todoListId)
     }
 
-    const addTask = (title: string) => {
+    const addTask = (title: string): void => {
         props.addTask(title, props.todoListId)
+    }
+
+    const onChangeTodoListTitle = (title: string): void => {
+        props.editTodoListTitle(title, props.todoListId)
     }
 
     const tasks = props.tasks.map(elem => {
@@ -50,22 +58,36 @@ export function TodoList(props: TodoListProps) {
         const returnIsDoneValue = (): void => {
             props.isDoneHandler(elem.id, props.todoListId)
         }
+
+        const onChangeTitleHandler = (title: string): void => {
+            props.editTask(title, props.todoListId, elem.id)
+        }
+
         return (
 
             <li key={elem.id}>
                 <input type="checkbox" checked={elem.isDone} onChange={returnIsDoneValue}/>
-                <span className={elem.isDone ? 'isDone' : ''}>{elem.title}</span>
+                <EditableSpan
+                    className={elem.isDone ? 'isDone' : ''}
+                    title={elem.title}
+                    onChange={onChangeTitleHandler}
+                />
                 <button onClick={deleteTaskHandler}>x</button>
             </li>
         )
     })
     return (
         <div>
-
-            <h3>{props.title}
+            <h3>
+                <EditableSpan
+                    className={''}
+                    title={props.title}
+                    onChange={onChangeTodoListTitle}
+                />
                 <button onClick={deleteTable}>X</button>
+
             </h3>
-           <AddItemForm addItem={addTask}/>
+            <AddItemForm addItem={addTask}/>
             <ul>
                 {tasks}
 
