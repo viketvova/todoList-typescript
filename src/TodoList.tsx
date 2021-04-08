@@ -2,6 +2,11 @@ import React from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {EditTaskType} from "./App";
+import Delete from '@material-ui/icons/Delete';
+import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import {FormControlLabel, CheckboxProps, Checkbox, withStyles} from "@material-ui/core";
+import {green} from "@material-ui/core/colors";
 
 type TaskType = {
     id: string,
@@ -23,6 +28,16 @@ type TodoListProps = {
     editTodoListTitle: (event: string, todoListId: string) => void
 }
 
+
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
 export function TodoList(props: TodoListProps) {
 
@@ -65,15 +80,20 @@ export function TodoList(props: TodoListProps) {
 
         return (
 
-            <li key={elem.id}>
-                <input type="checkbox" checked={elem.isDone} onChange={returnIsDoneValue}/>
+            <div key={elem.id}>
+                <FormControlLabel
+                    control={<GreenCheckbox checked={elem.isDone} onChange={returnIsDoneValue}/>}
+                    label=''
+                />
                 <EditableSpan
                     className={elem.isDone ? 'isDone' : ''}
                     title={elem.title}
                     onChange={onChangeTitleHandler}
                 />
-                <button onClick={deleteTaskHandler}>x</button>
-            </li>
+                <IconButton onClick={deleteTaskHandler}>
+                    <Delete/>
+                </IconButton>
+            </div>
         )
     })
     return (
@@ -84,19 +104,26 @@ export function TodoList(props: TodoListProps) {
                     title={props.title}
                     onChange={onChangeTodoListTitle}
                 />
-                <button onClick={deleteTable}>X</button>
 
+                <IconButton onClick={deleteTable}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            <ul>
-                {tasks}
-
-            </ul>
             <div>
-                <button className={props.filter === 'All' ? 'checked' : ''} onClick={onClickAll}>All</button>
-                <button className={props.filter === 'Active' ? 'checked' : ''} onClick={onClickActive}>Active</button>
-                <button className={props.filter === 'Completed' ? 'checked' : ''} onClick={onClickCompleted}>Completed
-                </button>
+                {tasks}
+            </div>
+            <div style={{margin: '10px'}}>
+                <Button
+                    variant={props.filter === 'All' ? 'contained' : 'text'}
+                    onClick={onClickAll}>All</Button>
+                <Button
+                    color='primary' variant={props.filter === 'Active' ? 'contained' : 'text'}
+                    onClick={onClickActive}>Active</Button>
+                <Button
+                    color='secondary'
+                    variant={props.filter === 'Completed' ? 'contained' : 'text'}
+                    onClick={onClickCompleted}>Completed</Button>
             </div>
         </div>
     )
