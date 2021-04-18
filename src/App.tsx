@@ -15,7 +15,7 @@ type RootTasksType = {
     [key: string]: TasksType,
 }
 
-type TodoListType = { id: string, title: string, filter: string }
+export type TodoListType = { id: string, title: string, filter: string }
 
 function App() {
 
@@ -46,13 +46,6 @@ function App() {
             {id: todoListId2, title: 'What to eat?', filter: 'All'},
         ])
 
-    const deleteTable = (todoListId: string) => {
-        let filterTasks = newTasks.filter(elem => elem.id !== todoListId)
-        setNewTasks(filterTasks)
-        delete tasks[todoListId]
-        setTasks({...tasks})
-    }
-
     function addTask(event: string, todoListId: string): void {
         let b = tasks[todoListId]
         if (event.trim() !== '') {
@@ -62,6 +55,15 @@ function App() {
         }
     }
 
+    function changeStatus(id: string, todoListId: string): void {
+        let newT = tasks[todoListId]
+        newT.map((elem: any) => {
+            if (elem.id === id) elem.isDone = !elem.isDone
+        })
+        tasks[todoListId] = newT
+        setTasks({...tasks})
+    }
+
     function editTask(event: string, todoListId: string, id: string): void {
         let newTasks = tasks[todoListId]
         newTasks.map(elem => {
@@ -69,15 +71,6 @@ function App() {
         })
         tasks[todoListId] = newTasks
         setTasks({...tasks})
-    }
-
-    function editTodoListTitle(event: string, todoListId: string): void {
-        let newTodo = [...newTasks]
-        let newTodoList = newTodo.find(elem => elem.id === todoListId)
-        if (newTodoList) {
-            newTodoList.title = event
-            setNewTasks([...newTodo])
-        }
     }
 
     function deleteTask(id: string, todoListId: string): void {
@@ -92,16 +85,16 @@ function App() {
         setNewTasks([...newTasks])
     }
 
-    function isDoneHandler(id: string, todoListId: string): void {
-        let newT = tasks[todoListId]
-        newT.map((elem: any) => {
-            if (elem.id === id) elem.isDone = !elem.isDone
-        })
-        tasks[todoListId] = newT
-        setTasks({...tasks})
+    function editTodoListTitle(event: string, todoListId: string): void {
+        let newTodo = [...newTasks]
+        let newTodoList = newTodo.find(elem => elem.id === todoListId)
+        if (newTodoList) {
+            newTodoList.title = event
+            setNewTasks([...newTodo])
+        }
     }
 
-    function addItem(title: string) {
+    function addTodoList(title: string) {
         if (title.trim() !== '') {
             let newT = [...newTasks]
             let newTodoList = {id: v1(), title: title, filter: 'All'}
@@ -112,6 +105,12 @@ function App() {
                 [newTodoList.id]: []
             })
         }
+    }
+
+    function removeTodolist(todoListId: string) {
+        setNewTasks([...newTasks.filter(elem => elem.id !== todoListId)])
+        delete tasks[todoListId]
+        setTasks({...tasks})
     }
 
     return (
@@ -129,7 +128,7 @@ function App() {
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
-                    <AddItemForm addItem={addItem}/>
+                    <AddItemForm addItem={addTodoList}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {
@@ -149,9 +148,9 @@ function App() {
                                             deleteTask={deleteTask}
                                             tasksCompleted={tasksCompleted}
                                             addTask={addTask}
-                                            isDoneHandler={isDoneHandler}
+                                            isDoneHandler={changeStatus}
                                             filter={t.filter}
-                                            deleteTable={deleteTable}
+                                            deleteTable={removeTodolist}
                                             editTask={editTask}
                                             editTodoListTitle={editTodoListTitle}
                                         />

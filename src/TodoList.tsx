@@ -14,7 +14,7 @@ type TaskType = {
     isDone: boolean,
 }
 export type AddTaskType = (event: string, todoListId: string) => void
-type TodoListProps = {
+export type TodoListProps = {
     title: string,
     tasks: Array<TaskType>
     deleteTask: (id: string, todoListId: string) => void
