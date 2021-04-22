@@ -11,7 +11,7 @@ export type TasksType = {
     id: string, title: string, isDone: boolean
 }[]
 
-type RootTasksType = {
+export type RootTasksType = {
     [key: string]: TasksType,
 }
 

@@ -76,3 +76,4 @@ test('Change filter of Todolist', () => {
     expect(endState[1].filter).toBe(newFilter)
     expect(endState[0].filter).toBe('All')
 })
+
