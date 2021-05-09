@@ -7,8 +7,8 @@ export const ADD_TODOLIST = 'ADD_TODOLIST'
 export const CHANGE_TODOLIST_TITLE = 'CHANGE_TODOLIST_TITLE'
 export const CHANGE_TODOLIST_FILTER = 'CHANGE_TODOLIST_FILTER'
 
-export type RemoveTodolistType = { type: 'REMOVE_TODOLIST', todoListId: string }
-export type AddTodolistType = { type: 'ADD_TODOLIST', title: string }
+export type RemoveTodolistType = { type: 'REMOVE_TODOLIST', todoListId: string}
+export type AddTodolistType = { type: 'ADD_TODOLIST', title: string, id: string }
 export type ChangeTodolistTitleType = { type: 'CHANGE_TODOLIST_TITLE', id: string, title: string }
 export type ChangeTodolistFilterType = { type: 'CHANGE_TODOLIST_FILTER', id: string, filter: string }
 
@@ -23,7 +23,8 @@ export const todolistReducer = (state: Array<TodoListType>, action: ActionType):
             ]
         case ADD_TODOLIST:
             return [
-                ...state, {id: v1(), title: action.title, filter: 'All'}
+                {id: action.id, title: action.title.trim(), filter: 'All'},
+                ...state
             ]
         case CHANGE_TODOLIST_TITLE:
             let newTodo = [...state]
@@ -46,23 +47,24 @@ export const todolistReducer = (state: Array<TodoListType>, action: ActionType):
 export const RemoveTodolistAC = (todoListId: string): RemoveTodolistType => {
     return {
         type: REMOVE_TODOLIST,
-        todoListId: todoListId
+        todoListId: todoListId,
     }
 }
 export const AddTodolistAC = (title: string): AddTodolistType => {
     return {
         type: ADD_TODOLIST,
-        title: title
+        title: title,
+        id: v1()
     }
 }
-export const ChangeTodolistTitleAC = (id: string, title: string): ChangeTodolistTitleType => {
+export const ChangeTodolistTitleAC = (title: string, id: string): ChangeTodolistTitleType => {
     return {
         type: CHANGE_TODOLIST_TITLE,
         id: id,
         title: title
     }
 }
-export const ChangeTodolistFilterAC = (id: string, filter: string): ChangeTodolistFilterType => {
+export const ChangeTodolistFilterAC = (filter: string, id: string): ChangeTodolistFilterType => {
     return {
         type: CHANGE_TODOLIST_FILTER,
         id: id,
