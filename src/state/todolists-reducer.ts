@@ -1,5 +1,6 @@
 import {TodoListType} from "../App";
 import {v1} from "uuid";
+import {useReducer} from "react";
 
 
 export const REMOVE_TODOLIST = 'REMOVE_TODOLIST'
@@ -7,15 +8,22 @@ export const ADD_TODOLIST = 'ADD_TODOLIST'
 export const CHANGE_TODOLIST_TITLE = 'CHANGE_TODOLIST_TITLE'
 export const CHANGE_TODOLIST_FILTER = 'CHANGE_TODOLIST_FILTER'
 
-export type RemoveTodolistType = { type: 'REMOVE_TODOLIST', todoListId: string}
+export type RemoveTodolistType = { type: 'REMOVE_TODOLIST', todoListId: string }
 export type AddTodolistType = { type: 'ADD_TODOLIST', title: string, id: string }
 export type ChangeTodolistTitleType = { type: 'CHANGE_TODOLIST_TITLE', id: string, title: string }
 export type ChangeTodolistFilterType = { type: 'CHANGE_TODOLIST_FILTER', id: string, filter: string }
 
 export type ActionType = RemoveTodolistType | AddTodolistType | ChangeTodolistTitleType | ChangeTodolistFilterType
 
-export const todolistReducer = (state: Array<TodoListType>, action: ActionType): Array<TodoListType> => {
 
+export const todoListId1 = v1()
+export const todoListId2 = v1()
+
+const initialState: Array<TodoListType> = [
+    {id: todoListId1, title: 'What to learn?', filter: 'All'},
+    {id: todoListId2, title: 'What to eat?', filter: 'All'},
+]
+export const todolistReducer = (state: Array<TodoListType> = initialState, action: ActionType): Array<TodoListType> => {
     switch (action.type) {
         case REMOVE_TODOLIST:
             return [
@@ -40,7 +48,7 @@ export const todolistReducer = (state: Array<TodoListType>, action: ActionType):
             })
             return [...state]
         default:
-            throw new Error(`I don't understand this action type`)
+            return state
     }
 }
 

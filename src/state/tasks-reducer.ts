@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {TasksType} from "../App";
-import {ADD_TODOLIST, AddTodolistType, REMOVE_TODOLIST, RemoveTodolistType} from "./todolists-reducer";
+import {ADD_TODOLIST, AddTodolistType, REMOVE_TODOLIST, RemoveTodolistType, todoListId1, todoListId2} from "./todolists-reducer";
 
 export const DELETE_TASK = 'DELETE-TASK'
 export const ADD_TASK = 'ADD_TASK'
@@ -15,12 +15,12 @@ export type ChangeTaskType = { type: 'CHANGE_STATUS', todoListId: string, id: st
 type ActionType = DeleteTaskType | AddTaskType | EditTaskType | ChangeTaskType | NewTodolistTaskType | AddTodolistType | RemoveTodolistType
 
 
-type RootTasksType = {
+export type RootTasksType = {
     [key: string]: TasksType,
 }
-
-const todoListId1 = v1()
-const todoListId2 = v1()
+//
+// const todoListId1 = v1()
+// const todoListId2 = v1()
 
 export const initialState: RootTasksType = {
     [todoListId1]: [
@@ -74,7 +74,7 @@ export let tasksReducer = (state: RootTasksType = initialState, action: ActionTy
                 ...copyState
             }
         default:
-            throw new Error(`I don't understand u`)
+            return state
     }
 }
 
