@@ -1,7 +1,5 @@
 import {TodoListType} from "../App";
 import {v1} from "uuid";
-import {useReducer} from "react";
-
 
 export const REMOVE_TODOLIST = 'REMOVE_TODOLIST'
 export const ADD_TODOLIST = 'ADD_TODOLIST'
@@ -19,10 +17,7 @@ export type ActionType = RemoveTodolistType | AddTodolistType | ChangeTodolistTi
 export const todoListId1 = v1()
 export const todoListId2 = v1()
 
-const initialState: Array<TodoListType> = [
-    {id: todoListId1, title: 'What to learn?', filter: 'All'},
-    {id: todoListId2, title: 'What to eat?', filter: 'All'},
-]
+const initialState: Array<TodoListType> = []
 export const todolistReducer = (state: Array<TodoListType> = initialState, action: ActionType): Array<TodoListType> => {
     switch (action.type) {
         case REMOVE_TODOLIST:

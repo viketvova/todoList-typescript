@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {TasksType} from "../App";
-import {ADD_TODOLIST, AddTodolistType, REMOVE_TODOLIST, RemoveTodolistType, todoListId1, todoListId2} from "./todolists-reducer";
+import {ADD_TODOLIST, AddTodolistType, REMOVE_TODOLIST, RemoveTodolistType} from "./todolists-reducer";
 
 export const DELETE_TASK = 'DELETE-TASK'
 export const ADD_TASK = 'ADD_TASK'
@@ -18,26 +18,8 @@ type ActionType = DeleteTaskType | AddTaskType | EditTaskType | ChangeTaskType |
 export type RootTasksType = {
     [key: string]: TasksType,
 }
-//
-// const todoListId1 = v1()
-// const todoListId2 = v1()
 
-export const initialState: RootTasksType = {
-    [todoListId1]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: false},
-        {id: v1(), title: 'ReactJS', isDone: true},
-        {id: v1(), title: 'Rest API', isDone: false},
-        {id: v1(), title: 'GraphQL', isDone: false},
-    ],
-    [todoListId2]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: false},
-        {id: v1(), title: 'ReactJS', isDone: true},
-        {id: v1(), title: 'Rest API', isDone: false},
-        {id: v1(), title: 'GraphQL', isDone: false},
-    ]
-}
+export const initialState: RootTasksType = {}
 
 export let tasksReducer = (state: RootTasksType = initialState, action: ActionType): RootTasksType => {
     switch (action.type) {
@@ -59,9 +41,13 @@ export let tasksReducer = (state: RootTasksType = initialState, action: ActionTy
             })
             return editedTask
         case CHANGE_STATUS:
-            let changedTaskStatus = {...state}
-            changedTaskStatus[action.todoListId].map(el => el.id === action.id ? el.isDone = !el.isDone : el.isDone)
-            return changedTaskStatus
+            let changedTaskStatus = state[action.todoListId]
+            let task = changedTaskStatus.find(el => el.id === action.id)
+            if(task) {
+                task.isDone = !task.isDone
+            }
+            state[action.todoListId] = [...changedTaskStatus]
+            return {...state}
         case ADD_TODOLIST:
             return {
                 ...state,
