@@ -45,9 +45,9 @@ function AppWithRedux() {
         dispatch(changeStatusAC(id, todoListId))
     }, [dispatch])
 
-    const editTask = (event: string, todoListId: string, id: string): void => {
+    const editTask = useCallback((event: string, todoListId: string, id: string): void => {
         dispatch(editTaskAC(event, todoListId, id))
-    }
+    }, [dispatch])
 
     const deleteTask = useCallback((id: string, todoListId: string): void => {
         dispatch(deleteTaskAC(id, todoListId))
@@ -92,8 +92,9 @@ function AppWithRedux() {
                         newTasks.map(t => {
 
                             let todoListTasks: TasksType = tasks[t.id]
-                            if (t.filter === 'Active') todoListTasks = todoListTasks.filter(elem => elem.isDone === false)
-                            if (t.filter === 'Completed') todoListTasks = todoListTasks.filter(elem => elem.isDone === true)
+                            let tasksForTodolist = todoListTasks
+                            // if (t.filter === 'Active') todoListTasks = todoListTasks.filter(elem => elem.isDone === false)
+                            // if (t.filter === 'Completed') todoListTasks = todoListTasks.filter(elem => elem.isDone === true)
                             return (
                                 <Grid item key={t.id}>
                                     <Paper style={{padding: '10px'}}>
@@ -101,7 +102,7 @@ function AppWithRedux() {
                                             key={t.id}
                                             todoListId={t.id}
                                             title={t.title}
-                                            tasks={todoListTasks}
+                                            tasks={tasksForTodolist}
                                             deleteTask={deleteTask}
                                             tasksCompleted={tasksCompleted}
                                             addTask={addTask}

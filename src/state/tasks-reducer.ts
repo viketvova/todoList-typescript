@@ -12,7 +12,14 @@ export type DeleteTaskType = { type: 'DELETE-TASK', todoListId: string, id: stri
 export type AddTaskType = { type: 'ADD_TASK', todoListId: string, title: string }
 export type EditTaskType = { type: 'EDIT_TASK', todoListId: string, id: string, title: string }
 export type ChangeTaskType = { type: 'CHANGE_STATUS', todoListId: string, id: string }
-type ActionType = DeleteTaskType | AddTaskType | EditTaskType | ChangeTaskType | NewTodolistTaskType | AddTodolistType | RemoveTodolistType
+type ActionType =
+    DeleteTaskType
+    | AddTaskType
+    | EditTaskType
+    | ChangeTaskType
+    | NewTodolistTaskType
+    | AddTodolistType
+    | RemoveTodolistType
 
 
 export type RootTasksType = {
@@ -35,18 +42,18 @@ export let tasksReducer = (state: RootTasksType = initialState, action: ActionTy
                 [action.todoListId]: [newTask, ...state[action.todoListId]]
             }
         case EDIT_TASK:
-            let editedTask = {...state}
-            editedTask[action.todoListId].map(el => {
-                if (el.id === action.id) el.title = action.title
-            })
-            return editedTask
+            let changedTitleStatus = state[action.todoListId]
+            state[action.todoListId] = changedTitleStatus
+                .map(task => task.id === action.id
+                    ? {...task, title: action.title}
+                    : task)
+            return {...state}
         case CHANGE_STATUS:
             let changedTaskStatus = state[action.todoListId]
-            let task = changedTaskStatus.find(el => el.id === action.id)
-            if(task) {
-                task.isDone = !task.isDone
-            }
-            state[action.todoListId] = [...changedTaskStatus]
+            state[action.todoListId] = changedTaskStatus
+                .map(task => task.id === action.id
+                    ? {...task, isDone: !task.isDone}
+                    : task)
             return {...state}
         case ADD_TODOLIST:
             return {

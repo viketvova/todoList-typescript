@@ -28,7 +28,6 @@ export type TodoListProps = {
 }
 
 
-// TodoListProps
 export const TodoList = React.memo((props: TodoListProps) => {
 
     console.log('Todolist is called')
@@ -45,9 +44,9 @@ export const TodoList = React.memo((props: TodoListProps) => {
         props.tasksCompleted('Completed', props.todoListId)
     }, [props.tasksCompleted, props.todoListId])
 
-    const deleteTable = useCallback((): void => {
+    const deleteTable = (): void => {
         props.deleteTable(props.todoListId)
-    }, [props.deleteTable, props.todoListId])
+    }
 
     const addTask = useCallback((title: string): void => {
         props.addTask(title, props.todoListId)
@@ -60,36 +59,6 @@ export const TodoList = React.memo((props: TodoListProps) => {
     let todoListTasks = props.tasks
     if (props.filter === 'Active') todoListTasks = props.tasks.filter((elem: any) => elem.isDone === false)
     if (props.filter === 'Completed') todoListTasks = props.tasks.filter((elem: any) => elem.isDone === true)
-    // props.tasks.map((elem: any) => {
-    //     const deleteTaskHandler = (): void => {
-    //         props.deleteTask(elem.id, props.todoListId)
-    //     }
-    //     const returnIsDoneValue = (): void => {
-    //         props.isDoneHandler(elem.id, props.todoListId)
-    //     }
-    //
-    //     const onChangeTitleHandler = (title: string): void => {
-    //         props.editTask(title, props.todoListId, elem.id)
-    //     }
-    //
-    //     return (
-    //
-    //         <div key={elem.id}>
-    //             <FormControlLabel
-    //                 control={<GreenCheckbox checked={elem.isDone} onChange={returnIsDoneValue}/>}
-    //                 label=''
-    //             />
-    //             <EditableSpan
-    //                 className={elem.isDone ? 'isDone' : ''}
-    //                 title={elem.title}
-    //                 onChange={onChangeTitleHandler}
-    //             />
-    //             <IconButton onClick={deleteTaskHandler}>
-    //                 <Delete/>
-    //             </IconButton>
-    //         </div>
-    //     )
-    // })
 
     return (
         <div>
@@ -107,7 +76,7 @@ export const TodoList = React.memo((props: TodoListProps) => {
             <AddItemForm addItem={addTask}/>
             <div>
                 {
-                    props.tasks.map((elem: any) => {
+                    todoListTasks.map((elem: any) => {
                         return (
                             <Task
                                 key={elem.id}
