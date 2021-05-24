@@ -64,7 +64,6 @@ export const TodoList = React.memo((props: TodoListProps) => {
         <div>
             <h3>
                 <EditableSpan
-                    className={''}
                     title={props.title}
                     onChange={onChangeTodoListTitle}
                 />

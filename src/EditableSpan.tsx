@@ -3,7 +3,6 @@ import { TextField } from "@material-ui/core";
 
 type EditableSpanType = {
     title: string
-    className: string
     onChange: (value: string) => void
 }
 
@@ -28,6 +27,6 @@ export const EditableSpan = React.memo((props: EditableSpanType) => {
     return(
             mode
                 ? <TextField label="Change value" value={title} onBlur={cancelEditModeHandler} autoFocus onChange={onChangeHandler}/>
-                : <span className={props.className} onDoubleClick={editModeHandler}>{props.title}</span>
+                : <span onDoubleClick={editModeHandler}>{props.title}</span>
         )
 })
