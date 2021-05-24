@@ -37,10 +37,12 @@ export let tasksReducer = (state: RootTasksType = initialState, action: ActionTy
             }
         case ADD_TASK:
             let newTask = {id: v1(), title: action.title, isDone: false}
-            return {
+            return action.title.trim() !== ''
+                ? {
                 ...state,
                 [action.todoListId]: [newTask, ...state[action.todoListId]]
             }
+            : state
         case EDIT_TASK:
             let changedTitleStatus = state[action.todoListId]
             state[action.todoListId] = changedTitleStatus

@@ -25,6 +25,7 @@ export const todolistReducer = (state: Array<TodoListType> = initialState, actio
                 ...state.filter(elem => elem.id !== action.todoListId)
             ]
         case ADD_TODOLIST:
+            if(action.title.trim() !== '')
             return [
                 {id: action.id, title: action.title.trim(), filter: 'All'},
                 ...state
