@@ -1,17 +1,18 @@
 import React from "react";
-import { action } from "@storybook/addon-actions";
-import {Meta} from "@storybook/react/types-6-0";
+
 import {EditableSpan} from "./EditableSpan";
+import { action } from '@storybook/addon-actions';
 
 export default  {
     title: 'EditableSpan Component',
     component: EditableSpan,
-} as Meta
+    argTypes: { onClick: { action: 'clicked' } },
+}
 
 
 export const EditableSpanExample = (props: any) => {
     return <EditableSpan
         title={'Start value'}
-        onChange={action('Value changed')}
+        onChange={action('button-click')}
     />
 }

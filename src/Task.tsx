@@ -44,7 +44,6 @@ export const Task = React.memo((props: TaskPropsType) => {
                 label=''
             />
             <EditableSpan
-                className={props.task.isDone ? 'isDone' : ''}
                 title={props.task.title}
                 onChange={onChangeTitleHandler}
             />
